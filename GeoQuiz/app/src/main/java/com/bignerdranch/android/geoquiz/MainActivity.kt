@@ -2,19 +2,24 @@ package com.bignerdranch.android.geoquiz
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import java.lang.StringBuilder
 
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var beforeButton: Button
     private lateinit var nextButton: Button
+    private lateinit var beforeImageButton: ImageButton
+    private lateinit var nextImageButton: ImageButton
     private lateinit var questionView: TextView
     private var questionIndex = 0
     private var questionBank = listOf<Question>(
@@ -27,6 +32,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate")
+
         setContentView(R.layout.activity_main)
 
         questionView = findViewById(R.id.quest_view)
@@ -34,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         trueButton = findViewById(R.id.true_button)
         beforeButton = findViewById(R.id.before_button)
         nextButton = findViewById(R.id.next_button)
+        beforeImageButton = findViewById(R.id.before_imagebutton)
+        nextImageButton = findViewById(R.id.next_imagebutton)
 
 
         trueButton.setOnClickListener { view: View ->
@@ -51,6 +60,13 @@ class MainActivity : AppCompatActivity() {
             updateQuesttion(questionIndex)
         }
 
+        beforeImageButton.setOnClickListener { view: View ->
+            if (questionIndex > 0) {
+                questionIndex --
+            }
+            updateQuesttion(questionIndex)
+        }
+
         nextButton.setOnClickListener { view: View ->
             if (questionIndex < questionBank.size - 1) {
                 questionIndex ++
@@ -58,7 +74,39 @@ class MainActivity : AppCompatActivity() {
             updateQuesttion(questionIndex)
         }
 
+        nextImageButton.setOnClickListener { view: View ->
+            if (questionIndex < questionBank.size - 1) {
+                questionIndex ++
+            }
+            updateQuesttion(questionIndex)
+        }
+
         updateQuesttion(0)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause")
     }
 
     private fun checkAnswer(answer: Boolean) {
