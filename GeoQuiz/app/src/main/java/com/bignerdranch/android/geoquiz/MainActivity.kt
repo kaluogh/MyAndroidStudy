@@ -9,6 +9,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import java.lang.StringBuilder
 
 private const val TAG = "MainActivity"
@@ -21,20 +23,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var beforeImageButton: ImageButton
     private lateinit var nextImageButton: ImageButton
     private lateinit var questionView: TextView
-    private var questionIndex = 0
-    private var questionBank = listOf<Question>(
-        Question(R.string.question_africa, false),
-        Question(R.string.question_asiz, true),
-        Question(R.string.question_australia, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_oceans, true),
-    )
+
+    private val quizViewModel: QuizViewModel by lazy {
+        ViewModelProviders.of(this).get(QuizViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate")
 
         setContentView(R.layout.activity_main)
+
+//        var quizViewModel = ViewModelProviders.of(this).get(QuizViewModel::class.java)
+//        Log.d(TAG, "Get quizViewModel.")
 
         questionView = findViewById(R.id.quest_view)
         falseButton = findViewById(R.id.false_button)
@@ -54,34 +55,46 @@ class MainActivity : AppCompatActivity() {
         }
 
         beforeButton.setOnClickListener { view: View ->
-            if (questionIndex > 0) {
-                questionIndex --
-            }
-            updateQuesttion(questionIndex)
+            quizViewModel.moveBefore()
+            updateQuesttion()
         }
 
         beforeImageButton.setOnClickListener { view: View ->
-            if (questionIndex > 0) {
-                questionIndex --
-            }
-            updateQuesttion(questionIndex)
+            quizViewModel.moveBefore()
+            updateQuesttion()
         }
 
         nextButton.setOnClickListener { view: View ->
-            if (questionIndex < questionBank.size - 1) {
-                questionIndex ++
-            }
-            updateQuesttion(questionIndex)
+            quizViewModel.moveNext()
+            updateQuesttion()
         }
 
         nextImageButton.setOnClickListener { view: View ->
-            if (questionIndex < questionBank.size - 1) {
-                questionIndex ++
-            }
-            updateQuesttion(questionIndex)
+            quizViewModel.moveNext()
+            updateQuesttion()
         }
 
-        updateQuesttion(0)
+        updateQuesttion()
+    }
+
+    private fun checkAnswer(answer: Boolean) {
+        var flag = answer == quizViewModel.currentQuestionAnswer
+        if (flag) {
+            showMessage(R.string.correct_toast)
+        } else {
+            showMessage(R.string.incorrect_toast)
+        }
+    }
+
+    private fun showMessage(@StringRes message: Int) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateQuesttion() {
+        var index: Int = quizViewModel.questionIndex
+        @StringRes var resId = quizViewModel.currentQuestionText
+//        questionView.setText(resId)
+        questionView.setText((index + 1).toString() + ": " + getString(resId))
     }
 
     override fun onDestroy() {
@@ -107,24 +120,5 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause")
-    }
-
-    private fun checkAnswer(answer: Boolean) {
-        var flag = answer == questionBank[questionIndex].answer
-        if (flag) {
-            showMessage(R.string.correct_toast)
-        } else {
-            showMessage(R.string.incorrect_toast)
-        }
-    }
-
-    private fun showMessage(@StringRes message: Int) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun updateQuesttion(index: Int) {
-        @StringRes var resId = questionBank[index].textResId
-//        questionView.setText(resId)
-        questionView.setText((index + 1).toString() + ": " + getString(resId))
     }
 }
