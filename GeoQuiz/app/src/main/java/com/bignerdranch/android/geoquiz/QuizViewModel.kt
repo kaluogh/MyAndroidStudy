@@ -12,6 +12,7 @@ class QuizViewModel : ViewModel() {
     }
 
     var questionIndex = 0
+    var isCheater = false
     private var questionBank: List<Question> = listOf(
         Question(R.string.question_africa, false),
         Question(R.string.question_asiz, true),

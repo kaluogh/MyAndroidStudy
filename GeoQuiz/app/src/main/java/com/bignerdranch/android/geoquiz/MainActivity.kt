@@ -1,5 +1,7 @@
 package com.bignerdranch.android.geoquiz
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,11 +11,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import java.lang.StringBuilder
 
 private const val TAG = "MainActivity"
+private const val REQUEST_CODE_CHEAT = 0
 
 class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var beforeImageButton: ImageButton
     private lateinit var nextImageButton: ImageButton
     private lateinit var questionView: TextView
+    private lateinit var cheatButton: Button
 
     private val quizViewModel: QuizViewModel by lazy {
         ViewModelProviders.of(this).get(QuizViewModel::class.java)
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         nextButton = findViewById(R.id.next_button)
         beforeImageButton = findViewById(R.id.before_imagebutton)
         nextImageButton = findViewById(R.id.next_imagebutton)
+        cheatButton = findViewById(R.id.cheat_button)
 
 
         trueButton.setOnClickListener { view: View ->
@@ -74,16 +77,37 @@ class MainActivity : AppCompatActivity() {
             updateQuesttion()
         }
 
+        cheatButton.setOnClickListener { view: View ->
+//            var intent = Intent(this, CheatActivity::class.java)
+            val answerIsTrue = quizViewModel.currentQuestionAnswer
+            var intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+//            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_CHEAT)
+        }
+
         updateQuesttion()
     }
 
-    private fun checkAnswer(answer: Boolean) {
-        var flag = answer == quizViewModel.currentQuestionAnswer
-        if (flag) {
-            showMessage(R.string.correct_toast)
-        } else {
-            showMessage(R.string.incorrect_toast)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            return
         }
+        if (requestCode == REQUEST_CODE_CHEAT) {
+            var result = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+            Log.d(TAG, "Have see answer? " + result.toString())
+            quizViewModel.isCheater = result
+        }
+    }
+
+    private fun checkAnswer(answer: Boolean) {
+        var correntAnswer: Boolean = quizViewModel.currentQuestionAnswer
+        var messageResId = when {
+            quizViewModel.isCheater -> R.string.judgment
+            answer == correntAnswer -> R.string.correct_toast
+            else -> R.string.incorrect_toast
+        }
+        showMessage(messageResId)
     }
 
     private fun showMessage(@StringRes message: Int) {
