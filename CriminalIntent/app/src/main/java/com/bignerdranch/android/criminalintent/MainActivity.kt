@@ -10,8 +10,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         var currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+
         if (currentFragment == null) {
-            var fragment = CrimeFragment()
+//            var fragment = CrimeFragment.newInstance()
+            var fragment = CrimeListFragment.newInstance()
+
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container,fragment)
                 .commit()
