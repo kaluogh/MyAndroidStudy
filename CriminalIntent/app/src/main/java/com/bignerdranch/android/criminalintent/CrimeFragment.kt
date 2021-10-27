@@ -14,11 +14,12 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.EditText
 
-private const val TAG = "CrimeFragment"
+
 
 class CrimeFragment : Fragment() {
 
     companion object {
+        private const val TAG = "CrimeFragment"
         fun newInstance() = CrimeFragment()
     }
 
@@ -37,7 +38,7 @@ class CrimeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view = inflater.inflate(R.layout.crime_fragment, container, false)
+        val view = inflater.inflate(R.layout.crime_fragment, container, false)
         titleEditText = view.findViewById(R.id.crime_title_edittext)
         dateButton = view.findViewById(R.id.crime_date_button)
         dateButton.apply {
@@ -57,7 +58,7 @@ class CrimeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        var titleWacher = object : TextWatcher {
+        val titleWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 //                TODO("Not yet implemented")
             }
@@ -70,19 +71,16 @@ class CrimeFragment : Fragment() {
 //                TODO("Not yet implemented")
             }
         }
-        titleEditText.addTextChangedListener(titleWacher)
+        titleEditText.addTextChangedListener(titleWatcher)
 
 //        solvedCheckBox.setOnCheckedChangeListener{ _, isChecked ->
 //            crime.isSolved = isChecked
 //        }
 
-        var solvedListener = object : CompoundButton.OnCheckedChangeListener {
-            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-                crime.isSolved = isChecked
-                Log.d(TAG, "isChecked: " + isChecked.toString())
-            }
+        val solvedListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            crime.isSolved = isChecked
+            Log.d(TAG, "isChecked: $isChecked")
         }
         solvedCheckBox.setOnCheckedChangeListener(solvedListener)
     }
-
 }

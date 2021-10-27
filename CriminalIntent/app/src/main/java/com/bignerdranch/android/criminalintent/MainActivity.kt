@@ -9,11 +9,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
         if (currentFragment == null) {
-//            var fragment = CrimeFragment.newInstance()
-            var fragment = CrimeListFragment.newInstance()
+            val fragment = CrimeFragment.newInstance()
+//            val fragment = CrimeListFragment.newInstance()
 
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container,fragment)
