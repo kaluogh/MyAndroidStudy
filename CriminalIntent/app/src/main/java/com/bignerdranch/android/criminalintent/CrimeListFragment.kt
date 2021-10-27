@@ -2,6 +2,7 @@ package com.bignerdranch.android.criminalintent
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,18 +10,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class CrimeListFragment : Fragment() {
 
     companion object {
+        private const val TAG = "CrimeListFragment"
         fun newInstance() = CrimeListFragment()
     }
 
     private lateinit var crimeViewModel: CrimeListViewModel
     private lateinit var crimeListView: RecyclerView
-    private var crimeAdapter:CrimeAdapter? = null
+    private var crimeAdapter:CrimeAdapter? = CrimeAdapter(emptyList())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,18 +32,30 @@ class CrimeListFragment : Fragment() {
         val view = inflater.inflate(R.layout.crime_list_fragment, container, false)
         crimeListView = view.findViewById(R.id.crime_list_fragment)
         crimeListView.layoutManager = LinearLayoutManager(context)
+        crimeListView.adapter = crimeAdapter
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        crimeViewModel = ViewModelProvider(this).get(CrimeListViewModel::class.java)
+        crimeViewModel.crimeListLiveData.observe(
+            viewLifecycleOwner,
+            Observer { crimes ->
+                crimes?.let {
+                    Log.i(TAG, "Got crimes ${crimes.size}")
+                    updateUI(crimes)
+                }
+            }
+        )
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        crimeViewModel = ViewModelProvider(this).get(CrimeListViewModel::class.java)
-        // TODO: Use the ViewModel
-        updateUI()
     }
 
-    private fun updateUI() {
-        val crimes:List<Crime> = crimeViewModel.crimes
+    private fun updateUI(crimes: List<Crime>) {
+//        val crimes:List<Crime> = crimeViewModel.crimes
         crimeAdapter = CrimeAdapter(crimes)
         crimeListView.adapter = crimeAdapter
     }
