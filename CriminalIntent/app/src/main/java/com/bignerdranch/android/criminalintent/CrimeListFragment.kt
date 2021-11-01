@@ -1,5 +1,6 @@
 package com.bignerdranch.android.criminalintent
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -13,8 +14,13 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 
 class CrimeListFragment : Fragment() {
+
+    interface Callbacks{
+        fun onCrimeSelected(crimeId: UUID)
+    }
 
     companion object {
         private const val TAG = "CrimeListFragment"
@@ -24,6 +30,7 @@ class CrimeListFragment : Fragment() {
     private lateinit var crimeViewModel: CrimeListViewModel
     private lateinit var crimeListView: RecyclerView
     private var crimeAdapter:CrimeAdapter? = CrimeAdapter(emptyList())
+    private var callbacks: Callbacks? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,11 +61,22 @@ class CrimeListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
+    }
+
     private fun updateUI(crimes: List<Crime>) {
 //        val crimes:List<Crime> = crimeViewModel.crimes
         crimeAdapter = CrimeAdapter(crimes)
         crimeListView.adapter = crimeAdapter
     }
+
 
     private inner class CrimeHolder(view: View):RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var crime:Crime
@@ -82,7 +100,8 @@ class CrimeListFragment : Fragment() {
         }
 
         override fun onClick(view: View) {
-            Toast.makeText(context, "${crime.title} pressed!", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "${crime.title} pressed!", Toast.LENGTH_SHORT).show()
+            callbacks?.onCrimeSelected(crime.id)
         }
     }
 
