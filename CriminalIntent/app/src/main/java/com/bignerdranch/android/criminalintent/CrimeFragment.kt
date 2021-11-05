@@ -13,14 +13,23 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.EditText
-
+import java.util.*
 
 
 class CrimeFragment : Fragment() {
 
     companion object {
         private const val TAG = "CrimeFragment"
-        fun newInstance() = CrimeFragment()
+        private const val  ARG_CRIME_ID = "crime_id"
+
+        fun newInstance(crimeId: UUID): CrimeFragment {
+            val args = Bundle().apply {
+                putSerializable(ARG_CRIME_ID, crimeId)
+            }
+            return CrimeFragment().apply {
+                arguments = args
+            }
+        }
     }
 
     private lateinit var crime: Crime
@@ -32,6 +41,7 @@ class CrimeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crime = Crime()
+        val crimeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
     }
 
     override fun onCreateView(
