@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.EditText
+import androidx.lifecycle.Observer
 import java.util.*
 
 
@@ -32,6 +33,7 @@ class CrimeFragment : Fragment() {
         }
     }
 
+    private lateinit var crimeId:UUID
     private lateinit var crime: Crime
     private lateinit var viewModel: CrimeViewModel
     private lateinit var titleEditText: EditText
@@ -41,7 +43,7 @@ class CrimeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crime = Crime()
-        val crimeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
+        crimeId = arguments?.getSerializable(ARG_CRIME_ID) as UUID
     }
 
     override fun onCreateView(
@@ -62,7 +64,23 @@ class CrimeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CrimeViewModel::class.java)
+        viewModel.loadCrime(crimeId)
+        viewModel.crimeLiveData.observe(
+            viewLifecycleOwner,
+            { crime ->
+                crime?.let {
+                    this.crime = crime
+                    updateUI()
+                }
+            }
+        )
         // TODO: Use the ViewModel
+    }
+
+    private fun updateUI(){
+        titleEditText.setText(crime.title)
+        dateButton.text = crime.date.toString()
+        solvedCheckBox.isChecked = crime.isSolved
     }
 
     override fun onStart() {
