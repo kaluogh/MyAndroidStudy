@@ -17,12 +17,13 @@ import androidx.lifecycle.Observer
 import java.util.*
 
 
-class CrimeFragment : Fragment() {
+class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
 
     companion object {
         private const val TAG = "CrimeFragment"
         private const val  ARG_CRIME_ID = "crime_id"
         private const val DIALOG_DATE = "DIALOG_DATE"
+        private const val REQUEST_DATE = 0
 
         fun newInstance(crimeId: UUID): CrimeFragment {
             val args = Bundle().apply {
@@ -113,10 +114,16 @@ class CrimeFragment : Fragment() {
         solvedCheckBox.setOnCheckedChangeListener(solvedListener)
 
         dateButton.setOnClickListener {
-            DatePickerFragment().apply{
+            DatePickerFragment.newInstance(crime.date).apply{
+                setTargetFragment(this@CrimeFragment, REQUEST_DATE)
                 show(this@CrimeFragment.requireFragmentManager() ,DIALOG_DATE)
             }
         }
+    }
+
+    override fun onDateSelected(date: Date) {
+        crime.date = date
+        updateUI()
     }
 
     override fun onStop() {
