@@ -22,6 +22,7 @@ class CrimeFragment : Fragment() {
     companion object {
         private const val TAG = "CrimeFragment"
         private const val  ARG_CRIME_ID = "crime_id"
+        private const val DIALOG_DATE = "DIALOG_DATE"
 
         fun newInstance(crimeId: UUID): CrimeFragment {
             val args = Bundle().apply {
@@ -53,10 +54,10 @@ class CrimeFragment : Fragment() {
         val view = inflater.inflate(R.layout.crime_fragment, container, false)
         titleEditText = view.findViewById(R.id.crime_title_edittext)
         dateButton = view.findViewById(R.id.crime_date_button)
-        dateButton.apply {
-            text = crime.date.toString()
-            isEnabled = false
-        }
+//        dateButton.apply {
+//            text = crime.date.toString()
+//            isEnabled = false
+//        }
         solvedCheckBox = view.findViewById(R.id.crime_solved_checkbox)
         return view
     }
@@ -110,6 +111,12 @@ class CrimeFragment : Fragment() {
             Log.d(TAG, "isChecked: $isChecked")
         }
         solvedCheckBox.setOnCheckedChangeListener(solvedListener)
+
+        dateButton.setOnClickListener {
+            DatePickerFragment().apply{
+                show(this@CrimeFragment.requireFragmentManager() ,DIALOG_DATE)
+            }
+        }
     }
 
     override fun onStop() {
