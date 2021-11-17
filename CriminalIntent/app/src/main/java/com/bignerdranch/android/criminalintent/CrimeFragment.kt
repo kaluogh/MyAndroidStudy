@@ -111,4 +111,9 @@ class CrimeFragment : Fragment() {
         }
         solvedCheckBox.setOnCheckedChangeListener(solvedListener)
     }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.saveCrime(crime)
+    }
 }
