@@ -1,5 +1,6 @@
 package com.bignerdranch.android.criminalintent
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Editable
@@ -13,7 +14,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.EditText
-import androidx.lifecycle.Observer
 import java.util.*
 
 
@@ -41,6 +41,8 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     private lateinit var titleEditText: EditText
     private lateinit var dateButton: Button
     private lateinit var solvedCheckBox: CheckBox
+    private lateinit var suspectButton: Button
+    private lateinit var reportButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +62,8 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
 //            isEnabled = false
 //        }
         solvedCheckBox = view.findViewById(R.id.crime_solved_checkbox)
+        suspectButton = view.findViewById(R.id.crime_suspect_text)
+        reportButton = view.findViewById(R.id.crime_report_text)
         return view
     }
 
@@ -119,6 +123,18 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
                 show(this@CrimeFragment.requireFragmentManager() ,DIALOG_DATE)
             }
         }
+
+        reportButton.setOnClickListener {
+            Intent(Intent.ACTION_SEND).apply {
+                type="text/plain"
+                putExtra(Intent.EXTRA_TEXT, getCrimeReport())
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject))
+            }.also { intent ->  
+//                startActivity(intent)
+                val chooserIntend =  Intent.createChooser(intent, getString(R.string.send_report))
+                startActivity(chooserIntend)
+            }
+        }
     }
 
     override fun onDateSelected(date: Date) {
@@ -129,5 +145,24 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     override fun onStop() {
         super.onStop()
         viewModel.saveCrime(crime)
+    }
+
+    private fun getCrimeReport(): String {
+        val solvedString = if (crime.isSolved) {
+            getString(R.string.crime_report_solved)
+        } else {
+            getString(R.string.crime_report_unsolved)
+        }
+
+        val dateString = android.text.format.DateFormat.format("EEE, MMM, dd", crime.date)
+
+
+        val suspect = if (crime.suspect.isBlank()){
+            getString(R.string.crime_report_no_suspect)
+        }else {
+            getString(R.string.crime_report_suspect, crime.suspect)
+        }
+
+        return getString(R.string.crime_report, crime.title, dateString, solvedString, suspect)
     }
 }
