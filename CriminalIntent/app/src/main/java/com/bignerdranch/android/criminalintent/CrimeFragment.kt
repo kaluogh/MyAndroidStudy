@@ -1,8 +1,11 @@
 package com.bignerdranch.android.criminalintent
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -24,6 +27,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         private const val  ARG_CRIME_ID = "crime_id"
         private const val DIALOG_DATE = "DIALOG_DATE"
         private const val REQUEST_DATE = 0
+        private const val REQUEST_CONTACT = 1
 
         fun newInstance(crimeId: UUID): CrimeFragment {
             val args = Bundle().apply {
@@ -83,10 +87,37 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         // TODO: Use the ViewModel
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+        when{
+            resultCode != Activity.RESULT_OK ->  return
+            requestCode ==  REQUEST_CONTACT && data != null -> {
+                val contractUri: Uri = data.data ?: Uri.EMPTY
+                val queryFields = arrayOf(ContactsContract.Contacts.DISPLAY_NAME)
+                val cursor = requireActivity().contentResolver.query(contractUri, queryFields, null, null, null)
+                cursor?.use {
+                    if (it.count == 0) {
+                        return
+                    }
+                    it.moveToFirst()
+                    val suspect = it.getString(0)
+                    crime.suspect = suspect
+                    viewModel.saveCrime(crime)
+                    suspectButton.text = suspect
+                }
+            }
+        }
+    }
+
     private fun updateUI(){
         titleEditText.setText(crime.title)
         dateButton.text = crime.date.toString()
         solvedCheckBox.isChecked = crime.isSolved
+        if (crime.suspect.isNotEmpty()) {
+            suspectButton.text = crime.suspect
+        } else {
+            suspectButton.text = getString(R.string.crime_suspect_text)
+        }
     }
 
     override fun onStart() {
@@ -135,6 +166,14 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
                 startActivity(chooserIntend)
             }
         }
+
+        suspectButton.apply {
+            val pickContactsContract = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+            setOnClickListener {
+                startActivityForResult(pickContactsContract, REQUEST_CONTACT)
+            }
+        }
+
     }
 
     override fun onDateSelected(date: Date) {
