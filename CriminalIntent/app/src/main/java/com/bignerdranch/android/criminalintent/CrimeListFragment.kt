@@ -23,7 +23,7 @@ class CrimeListFragment : Fragment() {
         fun newInstance() = CrimeListFragment()
     }
 
-    private lateinit var crimeViewModel: CrimeListViewModel
+    private lateinit var crimeListViewModel: CrimeListViewModel
     private lateinit var crimeListView: RecyclerView
     private var crimeAdapter:CrimeAdapter? = CrimeAdapter(emptyList())
     private var callbacks: Callbacks? = null
@@ -36,6 +36,19 @@ class CrimeListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_crime_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.new_crime -> {
+                val crime = Crime()
+                crimeListViewModel.addCrime(crime)
+                callbacks?.onCrimeSelected(crime.id)
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onCreateView(
@@ -51,8 +64,8 @@ class CrimeListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        crimeViewModel = ViewModelProvider(this).get(CrimeListViewModel::class.java)
-        crimeViewModel.crimeListLiveData.observe(
+        crimeListViewModel = ViewModelProvider(this).get(CrimeListViewModel::class.java)
+        crimeListViewModel.crimeListLiveData.observe(
             viewLifecycleOwner,
             { crimes ->
                 crimes?.let {
@@ -74,7 +87,7 @@ class CrimeListFragment : Fragment() {
     }
 
     private fun updateUI(crimes: List<Crime>) {
-//        val crimes:List<Crime> = crimeViewModel.crimes
+//        val crimes:List<Crime> = crimeListViewModel.crimes
         crimeAdapter = CrimeAdapter(crimes)
         crimeListView.adapter = crimeAdapter
     }

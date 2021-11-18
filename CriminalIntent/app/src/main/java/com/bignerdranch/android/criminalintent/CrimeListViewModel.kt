@@ -17,4 +17,8 @@ class CrimeListViewModel : ViewModel() {
 //        }
         crimeListLiveData = CrimeRepository.get().getCrimes()
     }
+
+    fun addCrime(crime: Crime){
+        CrimeRepository.get().addCrime(crime)
+    }
 }
