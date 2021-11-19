@@ -2,6 +2,8 @@ package com.bignerdranch.android.criminalintent
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -171,6 +173,11 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
             val pickContactsContract = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
             setOnClickListener {
                 startActivityForResult(pickContactsContract, REQUEST_CONTACT)
+            }
+
+            val resolveActivity: ResolveInfo? = requireActivity().packageManager.resolveActivity(pickContactsContract, PackageManager.MATCH_DEFAULT_ONLY)
+            if (resolveActivity == null) {
+                isEnabled = false
             }
         }
 
