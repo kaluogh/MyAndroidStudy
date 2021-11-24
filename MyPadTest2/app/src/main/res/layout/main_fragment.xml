@@ -11,24 +11,146 @@
             type="com.bignerdranch.android.mypadtest2.ui.main.MainViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.MainFragment">
+        android:orientation="vertical"
+        android:background="@drawable/rectangle_border_bold"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        tools:context=".ui.main.MainFragment"
+        >
 
-
-
-
-        <TextView
-            android:id="@+id/message"
-            android:layout_width="wrap_content"
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.test}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:minHeight="40dp"
+            android:stretchColumns="4"
+            android:shrinkColumns="4"
+            >
+            <TableRow
+                >
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/white"
+                    android:text="编组"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/white"
+                    android:text="车号"/>
+
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/white"
+                    android:text="代码"/>
+
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/white"
+                    android:text="等级"/>
+
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/white"
+                    android:text="故障描述"/>
+
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/white"
+                    android:text="故障发生时间"/>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/yellow"
+                    android:text="0002"/>
+
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/yellow"
+                    android:text="04"/>
+
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/yellow"
+                    android:text="10A2"/>
+
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/yellow"
+                    android:text="2"/>
+
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/yellow"
+                    android:text="车门安全环路未建立"/>
+
+                <TextView
+                    style="@style/table_td"
+                    android:textColor="@color/yellow"
+                    android:text="2020-12-13  10:20:18"/>
+            </TableRow>
+        </TableLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="#0893ba"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffff03"
+                android:textSize="12sp"
+                android:text="V=0  操作提示："
+                tools:text="Label1"/>
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:background="@drawable/rectangle_border"
+                android:textColor="#e0f3fe"
+                android:textSize="11sp"
+                tools:text="List1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffff03"
+                android:textSize="12sp"
+                android:text="V=0  操作提示："
+                tools:text="Label2"
+                />
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:background="@drawable/rectangle_border"
+                android:textColor="#e0f3fe"
+                android:textSize="11sp"
+                tools:text="List2"/>
+        </LinearLayout>
+
+
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/message"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="@{viewModel.test}"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    </LinearLayout>
 </layout>
