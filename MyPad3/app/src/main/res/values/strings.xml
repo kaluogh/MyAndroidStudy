@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MyPad3</string>
+    <string name="fault_group_label">编组</string>
+    <string name="fault_number_label">车号</string>
+    <string name="fault_code_label">代码</string>
+    <string name="fault_level_label">等级</string>
+    <string name="fault_description_label">故障描述</string>
+    <string name="fault_creatTime_label">故障发生时间</string>
+</resources>
