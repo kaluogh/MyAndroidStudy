@@ -39,7 +39,7 @@ class FaultFragment : Fragment() {
         viewModel.fault = testFault
         faultBinding.viewModel = viewModel
         faultBinding.lifecycleOwner = this
-        val faultFragmentAdapt = FaultFragmentAdapt(testFault.faultOperateList, layoutInflater)
+        val faultFragmentAdapt = FaultFragmentAdapt(testFault.faultOperateList, layoutInflater, this)
         faultBinding.recyclerView.apply {
             layoutManager = GridLayoutManager(context, 1)
             adapter = faultFragmentAdapt

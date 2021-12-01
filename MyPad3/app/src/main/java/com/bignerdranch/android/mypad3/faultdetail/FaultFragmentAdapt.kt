@@ -7,7 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.mypad3.R
 import com.bignerdranch.android.mypad3.databinding.FaultOperateBinding
 
-class FaultFragmentAdapt(private val faultOperates: List<FaultOperate>?, private val layoutInflater: LayoutInflater) :
+class FaultFragmentAdapt(
+    private val faultOperates: List<FaultOperate>?,
+    private val layoutInflater: LayoutInflater,
+    private val owener: FaultFragment
+    ) :
     RecyclerView.Adapter<FaultFragmentHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FaultFragmentHolder {
         val binding = DataBindingUtil.inflate<FaultOperateBinding>(
@@ -16,6 +20,7 @@ class FaultFragmentAdapt(private val faultOperates: List<FaultOperate>?, private
             parent,
             false
         )
+        binding.lifecycleOwner = owener
         return FaultFragmentHolder(binding)
     }
 
