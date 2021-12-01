@@ -37,17 +37,20 @@
     <style name="list_title">
         <item name="android:layout_marginTop">16dp</item>
         <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:textSize">9sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">#ffff03</item>
     </style>
     <style name="list_description_wrap">
         <item name="android:background">@drawable/fault_operate_text_wrap</item>
-        <item name="android:padding">10dp</item>
+        <item name="android:paddingStart">12.667dp</item>
+        <item name="android:paddingEnd">12.667dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
     </style>
     <style name="list_description">
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textSize">8sp</item>
+        <item name="android:textSize">10.667sp</item>
         <item name="android:textColor">#e0f3fe</item>
-        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
 </resources>
