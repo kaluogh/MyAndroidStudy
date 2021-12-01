@@ -15,18 +15,24 @@
             android:layout_height="wrap_content"
             android:text="@{viewModel.title}"
             />
-        <ScrollView
-            style="@style/list_description_wrap"
+        <TextView
+            style="@style/list_description_content"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            >
-            <TextView
-                style="@style/list_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@{viewModel.textList}"
-                />
-        </ScrollView>
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:text="@{viewModel.textList}"/>
+<!--        <ScrollView-->
+<!--            style="@style/list_description_wrap"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="100dp"-->
+<!--            >-->
+<!--            <TextView-->
+<!--                style="@style/list_description"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:text="@{viewModel.textList}"-->
+<!--                />-->
+<!--        </ScrollView>-->
     </LinearLayout>
 </layout>

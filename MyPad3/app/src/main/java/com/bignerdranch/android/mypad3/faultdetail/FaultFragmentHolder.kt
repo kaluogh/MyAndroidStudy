@@ -11,8 +11,7 @@ class FaultFragmentHolder(private val binding: FaultOperateBinding): RecyclerVie
     fun bind(faultOperate: FaultOperate){
         binding.apply {
             viewModel?.faultOperate = faultOperate
-//            executePendingBindings()
+            notifyChange()
         }
-        binding.notifyChange()
     }
 }
