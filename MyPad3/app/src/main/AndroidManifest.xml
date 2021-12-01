@@ -11,8 +11,8 @@
         android:theme="@style/Theme.MyPad3">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="landscape"
             android:exported="true">
+<!--            android:screenOrientation="landscape"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

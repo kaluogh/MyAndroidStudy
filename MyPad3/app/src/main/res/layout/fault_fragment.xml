@@ -99,6 +99,9 @@
                     style="@style/table_td"
                     android:singleLine="true"
                     android:ellipsize="end"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:gravity="start"
                     android:text="@{viewModel.description}"
                     />
                 <TextView
